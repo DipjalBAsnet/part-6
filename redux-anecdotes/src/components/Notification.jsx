@@ -6,11 +6,12 @@ const Notification = () => {
     border: "solid",
     padding: 10,
     borderWidth: 1,
+    display: notification ? "block" : "none",
   };
 
   if (!notification) return null;
 
-  return <div style={style}>{notification}</div>;
+  return <div style={style}> {notification ? notification.message : ""}</div>;
 };
 
 export default Notification;

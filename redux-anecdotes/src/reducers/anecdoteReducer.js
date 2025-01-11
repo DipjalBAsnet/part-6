@@ -16,26 +16,38 @@ export const createAnecdote = createAsyncThunk(
   }
 );
 
+export const voteForAnecdote = createAsyncThunk(
+  "anecdotes/voteForAnecdote",
+  async (anecdote) => {
+    const updatedAnecdote = await anecdoteService.updateVote(anecdote);
+    return updatedAnecdote;
+  }
+);
+
 const anecdoteSlice = createSlice({
   name: "anecdotes",
   initialState: [],
-  reducers: {
-    voteForAnecdote(state, action) {
-      const id = action.payload;
-      const anecdote = state.find((a) => a.id === id);
-      if (anecdote) anecdote.votes += 1;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAnecdotes.fulfilled, (state, action) => {
-        return action.payload;
+        return action.payload.sort((a, b) => b.votes - a.votes);
       })
       .addCase(createAnecdote.fulfilled, (state, action) => {
         state.push(action.payload);
+        return state.sort((a, b) => b.votes - a.votes); // Sort after adding the new anecdote
+      })
+      .addCase(voteForAnecdote.fulfilled, (state, action) => {
+        const updatedAnecdote = action.payload;
+        const anecdoteIndex = state.findIndex(
+          (anecdote) => anecdote.id === updatedAnecdote.id
+        );
+        if (anecdoteIndex !== -1) {
+          state[anecdoteIndex] = updatedAnecdote;
+        }
+        return state.sort((a, b) => b.votes - a.votes); // Sort after voting
       });
   },
 });
 
-export const { voteForAnecdote } = anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
