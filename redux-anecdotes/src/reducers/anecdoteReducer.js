@@ -37,10 +37,6 @@ const anecdoteSlice = createSlice({
       state.push(newAnecdote);
       state.sort((a, b) => b.votes - a.votes);
     },
-    notification(state, action) {
-      const notificationm = action.payload;
-      return notificationm;
-    },
   },
 });
 
