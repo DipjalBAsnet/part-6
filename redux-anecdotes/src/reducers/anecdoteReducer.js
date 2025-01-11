@@ -37,8 +37,13 @@ const anecdoteSlice = createSlice({
       state.push(newAnecdote);
       state.sort((a, b) => b.votes - a.votes);
     },
+    notification(state, action) {
+      const notificationm = action.payload;
+      return notificationm;
+    },
   },
 });
 
-export const { voteForAnecdote, createAnecdote } = anecdoteSlice.actions;
+export const { voteForAnecdote, createAnecdote, notification } =
+  anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
